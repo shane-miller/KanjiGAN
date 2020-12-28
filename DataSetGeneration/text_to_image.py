@@ -19,7 +19,7 @@ file = open('kanji.txt', 'r')
 lines = file.readlines()
 
 # Loop through each kanji
-for char_num, char in enumerate(tqdm(lines), 1):
+for char_num, char in enumerate(tqdm(lines, desc="Generating Images"), 1):
     # Create image
     img = Image.new('RGB', (128, 128), (255, 255, 255))
     draw = ImageDraw.Draw(img)
