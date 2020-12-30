@@ -13,7 +13,7 @@ shutil.rmtree(path, ignore_errors=True)
 os.mkdir(path)
 
 # Open kanji list
-file = open('kanji.txt', 'r')
+file = open('kanji.txt', 'r', encoding='utf8')
 
 # Create list of lines
 lines = file.readlines()
