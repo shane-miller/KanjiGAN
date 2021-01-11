@@ -148,7 +148,7 @@ for epoch in range(epochs):
     # ...after training for current epoch
     generated_img = generator(noise).cpu().detach()
     # save the generated torch tensor models to disk
-    save_generator_image(generated_img, f"../outputs/output_images/gen_img{epoch}.png")
+    save_generator_image(generated_img, f"../outputs/output_images/gen_img{epoch:04}.png")
     epoch_loss_g = loss_g / bi # total generator loss for the epoch
     epoch_loss_d = loss_d / bi # total discriminator loss for the epoch
     losses_g.append(epoch_loss_g)
@@ -165,7 +165,6 @@ torch.save(generator.state_dict(), '../outputs/generator.pth')
 images = [imageio.imread(file) for file in sorted(glob.glob(str(path / '*.png')))]
 duration = ([0.125] * (len(images) - 1))
 duration.append(2.5)
-print(duration)
 imageio.mimwrite(str(path / 'outputs.gif'), images, duration=duration)
 
 # plot and save the generator and discriminator loss
