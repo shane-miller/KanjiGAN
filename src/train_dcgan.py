@@ -27,7 +27,7 @@ mkdir(path)
 
 # learning parameters / configurations according to paper
 image_size = 128
-batch_size = 32
+batch_size = 128
 nz = 50 # latent vector size
 beta1 = 0.4 # beta1 value for Adam optimizer
 lr = 0.0003 # learning rate according to paper
@@ -173,7 +173,7 @@ plt.plot(losses_g, label='Generator loss')
 plt.plot(losses_d, label='Discriminator Loss')
 plt.legend()
 plt.savefig('../outputs/loss.png')
-plt.show()
+plt.close()
 
 # Remove __pycache__ folder
 rmtree(pathlib.Path(__file__).parent.absolute() / '__pycache__')
