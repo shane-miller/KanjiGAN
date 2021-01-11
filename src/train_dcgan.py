@@ -25,15 +25,15 @@ path = current_file_path.parents[0] / 'outputs' / 'output_images'
 rmtree(path, ignore_errors=True)
 mkdir(path)
 
-# learning parameters / configurations according to paper
 image_size = 96
-batch_size = 12
-nz = 100 # latent vector size
-beta1 = 0.4 # beta1 value for Adam optimizer
+batch_size = 128
+nz = 25 # latent vector size
+beta1 = 0.5 # beta1 value for Adam optimizer
 beta2 = 0.999 # beta2 value for Adam optimizer
-lr = 0.00025 # learning rate according to paper
-sample_size = 64 # fixed sample size
-epochs = 40 # number of epoch to train
+lr_g = 0.00015
+lr_d = 0.00006
+sample_size = 64 # number of generated example images
+epochs = 150
 
 # set the computation device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -42,9 +42,10 @@ print('Using', str(device).upper(), '\n')
 # image transforms
 transform = transforms.Compose([
     transforms.Resize(image_size),
+    transforms.CenterCrop(image_size),
+    transforms.Grayscale(num_output_channels=1),
     transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), 
-    (0.5, 0.5, 0.5)),
+    transforms.Normalize((0.5,), (0.5,))
 ])
 
 # prepare the data
@@ -66,8 +67,8 @@ generator.apply(weights_init)
 discriminator.apply(weights_init)
 
 # optimizers
-optim_g = optim.Adam(generator.parameters(), lr=lr, betas=(beta1, beta2))
-optim_d = optim.Adam(discriminator.parameters(), lr=lr, betas=(beta1, beta2))
+optim_g = optim.Adam(generator.parameters(), lr=lr_g, betas=(beta1, beta2), weight_decay=0.000001)
+optim_d = optim.Adam(discriminator.parameters(), lr=lr_d, betas=(beta1, beta2), weight_decay=0.0)
 
 # loss function
 criterion = nn.BCELoss()
@@ -149,7 +150,7 @@ for epoch in range(epochs):
     # ...after training for current epoch
     generated_img = generator(noise).cpu().detach()
     # save the generated torch tensor models to disk
-    save_generator_image(generated_img, f"../outputs/output_images/gen_img{epoch:04}.png")
+    save_generator_image(generated_img, f"../outputs/output_images/gen_img{(epoch+1):04}.png")
     epoch_loss_g = loss_g / bi # total generator loss for the epoch
     epoch_loss_d = loss_d / bi # total discriminator loss for the epoch
     losses_g.append(epoch_loss_g)
@@ -164,8 +165,8 @@ torch.save(generator.state_dict(), '../outputs/generator.pth')
 
 # Save GIF of images
 images = [imageio.imread(file) for file in sorted(glob.glob(str(path / '*.png')))]
-duration = ([0.125] * (len(images) - 1))
-duration.append(2.5)
+duration = ([0.075] * (len(images) - 1))
+duration.append(5)
 imageio.mimwrite(str(path / 'outputs.gif'), images, duration=duration)
 
 # plot and save the generator and discriminator loss

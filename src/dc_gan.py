@@ -17,17 +17,17 @@ class Generator(nn.Module):
             nn.BatchNorm2d(256),
             nn.ReLU(True),
             nn.ConvTranspose2d(
-                256, 192, kernel_size=4, 
-                stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(192),
-            nn.ReLU(True),
-            nn.ConvTranspose2d(
-                192, 128, kernel_size=4, 
+                256, 128, kernel_size=4, 
                 stride=2, padding=1, bias=False),
             nn.BatchNorm2d(128),
             nn.ReLU(True),
             nn.ConvTranspose2d(
-                128, 3, kernel_size=4, 
+                128, 96, kernel_size=4, 
+                stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(96),
+            nn.ReLU(True),
+            nn.ConvTranspose2d(
+                96, 1, kernel_size=4, 
                 stride=2, padding=1, bias=False),
             nn.Tanh()
         )
@@ -39,24 +39,28 @@ class Discriminator(nn.Module):
         super(Discriminator, self).__init__()
         self.main = nn.Sequential(
             nn.Conv2d(
-                3, 128, kernel_size=4, 
+                1, 96, kernel_size=4, 
                 stride=2, padding=1, bias=False),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.LeakyReLU(0.3, inplace=True),
+            nn.Dropout2d(0.4),
             nn.Conv2d(
-                128, 192, kernel_size=4, 
+                96, 128, kernel_size=4, 
                 stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(192),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.BatchNorm2d(128),
+            nn.LeakyReLU(0.3, inplace=True),
+            nn.Dropout2d(0.4),
             nn.Conv2d(
-                192, 256, kernel_size=4, 
+                128, 256, kernel_size=4, 
                 stride=2, padding=1, bias=False),
             nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.LeakyReLU(0.3, inplace=True),
+            nn.Dropout2d(0.4),
             nn.Conv2d(
                 256, 512, kernel_size=4, 
                 stride=2, padding=1, bias=False),
             nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.2, inplace=True),
+            nn.LeakyReLU(0.3, inplace=True),
+            nn.Dropout2d(0.4),
             nn.Conv2d(
                 512, 1, kernel_size=4, 
                 stride=1, padding=0, bias=False),
