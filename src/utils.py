@@ -11,7 +11,7 @@ def label_real(size):
     :param size: batch size
     :return real label vector
     """
-    data = torch.ones(size, 1, 5, 5)
+    data = torch.ones(size, 1, 3, 3)
     return data.to(device)
 
 def label_fake(size):
@@ -20,7 +20,7 @@ def label_fake(size):
     :param size: batch size
     :returns fake label vector
     """
-    data = torch.zeros(size, 1, 5, 5)
+    data = torch.zeros(size, 1, 3, 3)
     return data.to(device)
 
 def create_noise(sample_size, nz):
@@ -30,7 +30,7 @@ def create_noise(sample_size, nz):
     :param nz: latent vector size
     :returns random noise vector
     """
-    return torch.randn(sample_size, nz, 5, 5).to(device)
+    return torch.randn(sample_size, nz, 3, 3).to(device)
 
 def save_generator_image(image, path):
     """

@@ -26,13 +26,14 @@ rmtree(path, ignore_errors=True)
 mkdir(path)
 
 # learning parameters / configurations according to paper
-image_size = 128
-batch_size = 128
-nz = 50 # latent vector size
+image_size = 96
+batch_size = 12
+nz = 100 # latent vector size
 beta1 = 0.4 # beta1 value for Adam optimizer
-lr = 0.0003 # learning rate according to paper
+beta2 = 0.999 # beta2 value for Adam optimizer
+lr = 0.00025 # learning rate according to paper
 sample_size = 64 # fixed sample size
-epochs = 5 # number of epoch to train
+epochs = 40 # number of epoch to train
 
 # set the computation device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -65,8 +66,8 @@ generator.apply(weights_init)
 discriminator.apply(weights_init)
 
 # optimizers
-optim_g = optim.Adam(generator.parameters(), lr=lr, betas=(beta1, 0.998))
-optim_d = optim.Adam(discriminator.parameters(), lr=lr, betas=(beta1, 0.998))
+optim_g = optim.Adam(generator.parameters(), lr=lr, betas=(beta1, beta2))
+optim_d = optim.Adam(discriminator.parameters(), lr=lr, betas=(beta1, beta2))
 
 # loss function
 criterion = nn.BCELoss()
