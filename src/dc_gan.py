@@ -7,7 +7,7 @@ class Generator(nn.Module):
         self.main = nn.Sequential(
             # nz will be the input to the first convolution
             nn.ConvTranspose2d(
-                nz, 512, kernel_size=4, 
+                nz, 512, kernel_size=6, 
                 stride=1, padding=0, bias=False),
             nn.BatchNorm2d(512),
             nn.ReLU(True),
@@ -41,28 +41,28 @@ class Discriminator(nn.Module):
             nn.Conv2d(
                 1, 96, kernel_size=4, 
                 stride=2, padding=1, bias=False),
-            nn.LeakyReLU(0.3, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout2d(0.4),
             nn.Conv2d(
                 96, 128, kernel_size=4, 
                 stride=2, padding=1, bias=False),
             nn.BatchNorm2d(128),
-            nn.LeakyReLU(0.3, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout2d(0.4),
             nn.Conv2d(
                 128, 256, kernel_size=4, 
                 stride=2, padding=1, bias=False),
             nn.BatchNorm2d(256),
-            nn.LeakyReLU(0.3, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout2d(0.4),
             nn.Conv2d(
                 256, 512, kernel_size=4, 
                 stride=2, padding=1, bias=False),
             nn.BatchNorm2d(512),
-            nn.LeakyReLU(0.3, inplace=True),
+            nn.LeakyReLU(0.2, inplace=True),
             nn.Dropout2d(0.4),
             nn.Conv2d(
-                512, 1, kernel_size=4, 
+                512, 1, kernel_size=6, 
                 stride=1, padding=0, bias=False),
             nn.Sigmoid()
         )

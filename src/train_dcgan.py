@@ -26,14 +26,14 @@ rmtree(path, ignore_errors=True)
 mkdir(path)
 
 image_size = 96
-batch_size = 128
-nz = 25 # latent vector size
-beta1 = 0.5 # beta1 value for Adam optimizer
-beta2 = 0.999 # beta2 value for Adam optimizer
-lr_g = 0.00015
-lr_d = 0.00006
+batch_size = 32
+nz = 100 # latent vector size
+beta1 = 0.9 # beta1 value for Adam optimizer
+beta2 = 0.9999 # beta2 value for Adam optimizer
+lr_g = 0.0001
+lr_d = 0.00001
 sample_size = 64 # number of generated example images
-epochs = 150
+epochs = 1000
 
 # set the computation device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -67,8 +67,8 @@ generator.apply(weights_init)
 discriminator.apply(weights_init)
 
 # optimizers
-optim_g = optim.Adam(generator.parameters(), lr=lr_g, betas=(beta1, beta2), weight_decay=0.000001)
-optim_d = optim.Adam(discriminator.parameters(), lr=lr_d, betas=(beta1, beta2), weight_decay=0.0)
+optim_g = optim.Adam(generator.parameters(), lr=lr_g, betas=(beta1, beta2), weight_decay=0.0001)
+optim_d = optim.Adam(discriminator.parameters(), lr=lr_d, betas=(beta1, beta2), weight_decay=0.0001)
 
 # loss function
 criterion = nn.BCELoss()
@@ -150,7 +150,7 @@ for epoch in range(epochs):
     # ...after training for current epoch
     generated_img = generator(noise).cpu().detach()
     # save the generated torch tensor models to disk
-    save_generator_image(generated_img, f"../outputs/output_images/gen_img{(epoch+1):04}.png")
+    save_generator_image(generated_img, f"../outputs/output_images/gen_img{(epoch+1):0{len(str(epochs))}}.png")
     epoch_loss_g = loss_g / bi # total generator loss for the epoch
     epoch_loss_d = loss_d / bi # total discriminator loss for the epoch
     losses_g.append(epoch_loss_g)
