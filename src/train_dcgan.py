@@ -25,15 +25,15 @@ path = current_file_path.parents[0] / 'outputs' / 'output_images'
 rmtree(path, ignore_errors=True)
 mkdir(path)
 
-image_size = 96
-batch_size = 32
-nz = 100 # latent vector size
+image_size = 128
+batch_size = 8
+nz = 2048 # latent vector size
 beta1 = 0.9 # beta1 value for Adam optimizer
-beta2 = 0.9999 # beta2 value for Adam optimizer
-lr_g = 0.0001
-lr_d = 0.00001
+beta2 = 0.9998 # beta2 value for Adam optimizer
+lr_g = 0.000065
+lr_d = 0.0000018
 sample_size = 64 # number of generated example images
-epochs = 1000
+epochs = 500
 
 # set the computation device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -67,8 +67,8 @@ generator.apply(weights_init)
 discriminator.apply(weights_init)
 
 # optimizers
-optim_g = optim.Adam(generator.parameters(), lr=lr_g, betas=(beta1, beta2), weight_decay=0.0001)
-optim_d = optim.Adam(discriminator.parameters(), lr=lr_d, betas=(beta1, beta2), weight_decay=0.0001)
+optim_g = optim.Adam(generator.parameters(), lr=lr_g, betas=(beta1, beta2), weight_decay=0.00001)
+optim_d = optim.Adam(discriminator.parameters(), lr=lr_d, betas=(beta1, beta2), weight_decay=0.0006)
 
 # loss function
 criterion = nn.BCELoss()
